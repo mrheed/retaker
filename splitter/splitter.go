@@ -25,7 +25,7 @@ func (s *Splitter) getDocument() ([]string, error) {
 	var regex string
 	switch s.ResourceType {
 	case "js":
-		regex = "<script[a-z|\\s|A-Z|0-9|.|\"|\\/]+src=[\"|'].*?[\"|']><\\/script>"
+		regex = "<script[a-z|\\s|A-Z|0-9|.|\"|\\/|+|=]+src=[\"|'].*?[\"|']><\\/script>"
 	case "css":
 		regex = "<link.*?href=[\"|'].+?.css[\"|']"
 	default:
@@ -68,8 +68,15 @@ func (s *Splitter) GetResourceLink() ([]string, error) {
 		normalizedRes := strings.Split(res, "\"")[1]
 		_, err = s.regexMatch(normalizedRes, "^(https|http):\\/\\/[a-z|A-Z|.|0-9]+.*?\\/")
 		if err != nil {
+			fHost := strings.Split(normalizedRes, "/")
 			uri := s.regexSplit(s.URI, "\\/[a-z|A-Z|.|\\-|0-9]+.(html|php)+?$")[0]
-			resources = append(resources, uri+"/"+normalizedRes)
+			if fHost[0] == "" && fHost[1] == "" {
+				resources = append(resources, "http:"+normalizedRes)
+			} else if fHost[0] == "" {
+				resources = append(resources, uri+normalizedRes)
+			} else {
+				resources = append(resources, uri+"/"+normalizedRes)
+			}
 		} else {
 			resources = append(resources, normalizedRes)
 		}

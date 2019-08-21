@@ -24,7 +24,7 @@ func (r *Requester) GetBody() (string, error) {
 	}
 	if resp.StatusCode != 200 {
 		splitted := strings.Split(r.URI, "/")
-		return "", errors.New("unable to make request on " + splitted[len(splitted)-1] + " with returned status: " + resp.Status)
+		return "", errors.New("unable to make request on " + splitted[len(splitted)-1] + " with return status: " + resp.Status)
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)

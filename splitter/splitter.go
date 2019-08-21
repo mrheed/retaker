@@ -25,7 +25,7 @@ func (s *Splitter) getDocument() ([]string, error) {
 	var regex string
 	switch s.ResourceType {
 	case "js":
-		regex = "<script[a-z|\\s|A-Z|0-9|.|\"|\\/]+src=[\"|'].*?[\"|']><\\/script>"
+		regex = "<script[a-z|\\s|A-Z|0-9|.|\"|\\/|+|=]+src=[\"|'].*?[\"|']><\\/script>"
 	case "css":
 		regex = "<link.*?href=[\"|'].+?.css[\"|']"
 	default:

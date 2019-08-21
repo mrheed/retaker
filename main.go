@@ -50,7 +50,7 @@ func main() {
 		ketok := strings.Split(d, "/")
 		filename := ketok[len(ketok)-1]
 		d1 := []byte(body1)
-		err = ioutil.WriteFile(*path+filename, d1, 0644)
+		err = ioutil.WriteFile(*path+"/"+filename, d1, 0644)
 		if err != nil {
 			fmt.Println(err.Error())
 			continue

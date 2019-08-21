@@ -25,11 +25,7 @@ func (s *Splitter) getDocument() ([]string, error) {
 	var regex string
 	switch s.ResourceType {
 	case "js":
-<<<<<<< HEAD
-		regex = "<script[a-z|\\s|A-Z|0-9|.|\"|\\/|+|=]+src=[\"'].*?[\"'].*?><\\/script>"
-=======
-		regex = "<script[a-z|\\s|A-Z|0-9|.|\"|\\/|+|=]+src=[\"|'].*?[\"|']><\\/script>"
->>>>>>> 95d621d3637b8dab67ac7f146e97ce9b18c1a387
+		regex = "<script[a-z|\\s|A-Z|0-9|.|\"|\\/|+|=|\\-|_]+src=[\"'].*?[\"'].*?><\\/script>"
 	case "css":
 		regex = "<link.*?href=[\"'].+?css.+?[\"'].*?[>\\/>]"
 	default:
@@ -53,9 +49,9 @@ func (s *Splitter) GetResourceLink() ([]string, error) {
 		var regex string
 		switch s.ResourceType {
 		case "js":
-			regex = "src=[\"'].*?[\"']"
+			regex = "src=(\"|').*?(\"|')"
 		case "css":
-			regex = "href=[\"'].+?css.+?[\"']"
+			regex = "href=(\"|').+?css.+?(\"|')"
 		default:
 			return []string{}, errors.New("resource type doesn't exist")
 		}
@@ -64,12 +60,11 @@ func (s *Splitter) GetResourceLink() ([]string, error) {
 			fmt.Println("skipping", d)
 			continue
 		}
-		res, err := s.regexMatch(m1, "['|\"](.*).*?['|\"]")
+		res, err := s.regexMatch(m1, "('|\")(.*).*?('|\")")
 		if err != nil {
 			fmt.Println("skipping " + d)
 			continue
 		}
-
 		normalizedRes := s.regexSplit(res, "(\"|')")[1]
 		_, err = s.regexMatch(normalizedRes, "^(https|http):\\/\\/[a-z|A-Z|.|0-9]+.*?\\/")
 		if err != nil {

@@ -39,7 +39,7 @@ func main() {
 		fmt.Println(err.Error())
 		return
 	}
-	CreateDirIfNotExist(*path)
+	CreateDirIfNotExist(*path + "/")
 	for _, d := range res {
 		requester.URI = d
 		body1, err := requester.GetBody()
